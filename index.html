@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Amarachi 💜 Will You Be My Valentine?</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg1: #e9d5ff;
+      --bg2: #f5edff;
+      --card: #ffffffcc;
+      --yes: #7c3aed;
+      --yesHover: #6d28d9;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, var(--bg2), var(--bg1));
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .container {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+    }
+
+    .card {
+      position: relative;
+      width: min(780px, 95vw);
+      padding: 36px 26px 32px;
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.15);
+      z-index: 10;
+    }
+
+    .music-control {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      font-size: 13px;
+      font-style: italic;
+      cursor: pointer;
+      opacity: 0.8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    h1 {
+      font-size: clamp(26px, 4vw, 42px);
+      margin-bottom: 14px;
+    }
+
+    .message {
+      font-size: clamp(16px, 2.4vw, 19px);
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+
+    .button-zone {
+      position: relative;
+      width: min(520px, 95%);
+      height: 150px;
+      margin: 0 auto;
+    }
+
+    button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 16px 28px;
+      font-size: 18px;
+      font-weight: 700;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(0,0,0,.15);
+      transition: transform 0.3s ease;
+    }
+
+    #yesBtn {
+      left: 18%;
+      background: var(--yes);
+      color: #fff;
+    }
+
+    #noBtn {
+      left: 62%;
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .result {
+      display: none;
+      margin-top: 22px;
+    }
+
+    .gif {
+      width: min(420px, 90vw);
+      border-radius: 16px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.2);
+    }
+
+    /* Wiggle animation for "No" button */
+    @keyframes wiggle {
+      0% { transform: translate(0,0) rotate(0deg); }
+      25% { transform: translate(-5px, 2px) rotate(-5deg); }
+      50% { transform: translate(5px, -2px) rotate(5deg); }
+      75% { transform: translate(-5px, 2px) rotate(-5deg); }
+      100% { transform: translate(0,0) rotate(0deg); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 🎵 Audio file -->
+  <audio id="bgMusic" preload="auto">
+    <source src="until-i-found-you.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="container">
+    <main class="card">
+
+      <div class="music-control" id="playMusic">
+        ▶ listen to our song
+      </div>
+
+      <h1>Amarachi Mbah 💜</h1>
+
+      <div class="message">
+        It’s been just three months since I met you, Amarachi,  
+        but these have been the most transformative three months of my life.<br><br>
+
+        Life feels warmer, kinder, and more beautiful with you in it.
+        You are my heart’s desire, my joy, and my peace.<br><br>
+
+        I love you deeply, and I bless God for bringing you into my life.<br><br>
+
+        Will you be my Valentine? 💜
+      </div>
+
+      <section class="button-zone" id="zone">
+        <button id="yesBtn">Yes 💜</button>
+        <button id="noBtn">No</button>
+      </section>
+
+      <section class="result" id="result">
+        <h2>You made my heart so happy 💜</h2>
+        <img class="gif"
+          src="https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyemY2dHF1YXdudzlpdWg2bGx2MHBsMDc4eGNlczRkZDI1Mnc3aDFteCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26xBsMYjG4vBob2rC/giphy.gif" />
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const music = document.getElementById("bgMusic");
+    const playBtn = document.getElementById("playMusic");
+
+    playBtn.onclick = () => {
+      music.play();
+      playBtn.textContent = "♪ playing our song";
+    };
+
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const result = document.getElementById("result");
+
+    // Make "No" button playful: wiggle then teleport anywhere
+    function moveNoBtn() {
+      noBtn.style.animation = "wiggle 0.4s";
+      setTimeout(() => {
+        noBtn.style.animation = "";
+        const maxX = window.innerWidth - noBtn.offsetWidth;
+        const maxY = window.innerHeight - noBtn.offsetHeight;
+        const randX = Math.random() * maxX;
+        const randY = Math.random() * maxY;
+        noBtn.style.left = `${randX}px`;
+        noBtn.style.top = `${randY}px`;
+      }, 400);
+    }
+
+    noBtn.addEventListener("mouseover", moveNoBtn);
+    noBtn.addEventListener("click", moveNoBtn);
+
+    // Make "Yes" button grow with each click + confetti
+    yesBtn.addEventListener("click", () => {
+      // Grow button
+      let currentScale = parseFloat(getComputedStyle(yesBtn).transform.split(',')[0].replace('matrix(', '')) || 1;
+      currentScale += 0.15; // incremental growth
+      yesBtn.style.transform = `translateY(-50%) scale(${currentScale})`;
+
+      // Show result
+      result.style.display = "block";
+
+      // Trigger confetti
+      confetti({
+        particleCount: 300,
+        spread: 160,
+        origin: { y: 0.6 }
+      });
+    });
+  </script>
+</body>
+</html>
